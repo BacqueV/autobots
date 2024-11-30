@@ -1,9 +1,12 @@
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 import asyncio
+
+from aiogram.types import users_shared
 from core.settings import settings
 from core.handlers import get_routers
 from core.utils.db_api import Database
+from core import handlers
 
 
 async def start():

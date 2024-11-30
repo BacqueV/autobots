@@ -29,8 +29,6 @@ class Database:
         execute: bool = False,
     ):
         async with self.pool.acquire() as connection:
-            result = None
-
             connection: Connection
             async with connection.transaction():
                 if fetch:
