@@ -1,5 +1,5 @@
 from aiogram import Router
-from aiogram.filters import Command
+from aiogram.filters import CommandStart
 from aiogram.types import Message
 from core.utils.db_api import Database
 
@@ -8,7 +8,7 @@ router = Router()
 db = Database()
 
 
-@router.message(Command("start"))
+@router.message(CommandStart())
 async def start(message: Message):
     name = message.from_user.username
 
