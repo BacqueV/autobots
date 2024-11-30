@@ -1,9 +1,7 @@
-from typing import Union
-
 import asyncpg
+from typing import Union
 from asyncpg import Connection
 from asyncpg.pool import Pool
-
 from core.settings import settings
 
 
@@ -12,12 +10,7 @@ class Database:
         self.pool: Union[Pool, None] = None
 
     async def connect(self):
-        self.pool = await asyncpg.create_pool(
-            user=settings.connection.user,
-            password=settings.connection.password,
-            host=settings.connection.host,
-            database=settings.connection.database,
-        )
+        self.pool = await asyncpg.create_pool(dsn=settings.connection.get_dsn())
 
     async def disconnect(self):
         if self.pool is not None:

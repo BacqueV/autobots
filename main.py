@@ -7,25 +7,26 @@ from core.handlers import get_routers
 from core.utils.db_api import Database
 from core.utils.set_bot_commands import set_bot_commands
 from core.utils.log_config import logger
-
+from container import container
 
 bot = Bot(token=settings.bot.token, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
-db = Database()
 
 
-# on_startup
 @dp.startup.register
 async def on_startup():
+    db = Database()
+    container.register("db", db)
+
     await db.connect()
     await db.create_table_users()
     await set_bot_commands(bot)
     logger.info("Бот успешно запущен!")
 
 
-# on_shutdown
 @dp.shutdown.register
 async def on_shutdown():
+    db = container.get("db")
     await db.disconnect()
     await bot.session.close()
     logger.info("Бот успешно завершил работу.")

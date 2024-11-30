@@ -1,17 +1,17 @@
 from aiogram import Router
-from aiogram.filters import CommandStart
+from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
-from core.utils.db_api import Database
+from container import container
 
 
 router = Router()
-db = Database()
 
 
 @router.message(CommandStart())
 async def start(message: Message):
     name = message.from_user.username
 
+    db = container.get("db")
     user = await db.select_user(message.from_user.id)
     if user is None:
         await db.add_user(
@@ -27,3 +27,11 @@ async def start(message: Message):
             telegram_id=message.from_user.id,
         )
         await message.answer(f"Здравствуй, {name}, приветствую еще раз!")
+
+
+@router.message(Command("help"))
+async def help(message: Message):
+    await message.reply(
+        "/start - Начало всех начал!\n"
+        "/help - Предоставляет информацию о доступных командах :D"
+    )
