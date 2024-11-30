@@ -18,6 +18,9 @@ db = Database()
 @dp.startup.register
 async def on_startup():
     await db.connect()
+    app = {}
+    app["db"] = db
+
     await db.create_table_users()
     await set_bot_commands(bot)
     logger.info("Бот успешно запущен!")

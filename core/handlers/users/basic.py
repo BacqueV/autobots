@@ -5,7 +5,6 @@ from core.utils.db_api import Database
 
 
 router = Router()
-db = Database()
 
 
 @router.message(CommandStart())
