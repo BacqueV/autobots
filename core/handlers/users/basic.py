@@ -1,10 +1,11 @@
 from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message
-from core.utils.db_api import Database as db
+from core.utils.db_api import Database
 
 
 router = Router()
+db = Database()
 
 
 @router.message(Command("start"))
@@ -25,4 +26,4 @@ async def start(message: Message):
             username=message.from_user.username,
             telegram_id=message.from_user.id,
         )
-        await message.answer(f"здравствуй, {name}, приветствую еще раз!")
+        await message.answer(f"Здравствуй, {name}, приветствую еще раз!")
