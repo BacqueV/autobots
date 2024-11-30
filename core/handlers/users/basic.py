@@ -1,4 +1,4 @@
-from aiogram import Router, F
+from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 from core.utils.db_api import Database
@@ -12,7 +12,7 @@ db = Database()
 async def start(message: Message):
     name = message.from_user.username
 
-    user = await db.select_user(telegram_id=message.from_user.id)
+    user = await db.select_user(message.from_user.id)
     if user is None:
         await db.add_user(
             full_name=message.from_user.full_name,

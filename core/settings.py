@@ -28,10 +28,10 @@ def get_settings(path: str):
     return Settings(
         bot=Bot(token=env.str("TOKEN")),
         connection=Connection(
-            user=env.str("USER"),
-            password=env.str("PASSWORD"),
-            host=env.str("HOST"),
-            database=env.str("DATABASE"),
+            user=env.str("DB_USER"),
+            password=env.str("DB_PASSWORD"),
+            host=env.str("DB_HOST"),
+            database=env.str("DB_NAME"),
         ),
     )
 

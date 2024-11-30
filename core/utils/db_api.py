@@ -11,7 +11,7 @@ class Database:
     def __init__(self):
         self.pool: Union[Pool, None] = None
 
-    async def create(self):
+    async def connect(self):
         self.pool = await asyncpg.create_pool(
             user=settings.connection.user,
             password=settings.connection.password,
@@ -29,6 +29,8 @@ class Database:
         execute: bool = False,
     ):
         async with self.pool.acquire() as connection:
+            result = None
+
             connection: Connection
             async with connection.transaction():
                 if fetch:
@@ -67,10 +69,9 @@ class Database:
         sql = "SELECT * FROM users"
         return await self.execute(sql, fetch=True)
 
-    async def select_user(self, **kwargs):
-        sql = "SELECT * FROM users WHERE "
-        sql, parameters = self.format_args(sql, parameters=kwargs)
-        return await self.execute(sql, *parameters, fetchrow=True)
+    async def select_user(self, telegram_id):
+        sql = "SELECT * FROM users WHERE telegram_id=$1"
+        return await self.execute(sql, telegram_id, fetchrow=True)
 
     async def count_users(self):
         sql = "SELECT COUNT(*) FROM users"
