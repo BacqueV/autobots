@@ -17,7 +17,6 @@ db = Database()
 # on_startup
 @dp.startup.register
 async def on_startup():
-    print("hey")
     logger.warning("Инициализация бота...")
     logger.warning("Бот запускается...")
     await set_bot_commands(bot)
