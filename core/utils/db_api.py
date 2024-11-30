@@ -19,6 +19,10 @@ class Database:
             database=settings.connection.database,
         )
 
+    async def disconnect(self):
+        if self.pool is not None:
+            await self.pool.close()
+
     async def execute(
         self,
         command,

@@ -17,31 +17,24 @@ db = Database()
 # on_startup
 @dp.startup.register
 async def on_startup():
-    print(logger)
-    logger.warning("Инициализация бота...")
-    logger.warning("Бот запускается...")
+    await db.connect()
+    await db.create_table_users()
     await set_bot_commands(bot)
-    logger.warning("Команды бота установлены.")
-    logger.warning("Бот успешно запущен!")
+    logger.info("Бот успешно запущен!")
 
 
 # on_shutdown
 @dp.shutdown.register
 async def on_shutdown():
-    logger.warning("Бот завершает работу...")
+    await db.disconnect()
     await bot.session.close()
-    logger.warning("Сессия HTTP клиента закрыта.")
-    logger.warning("Бот успешно завершил работу.")
+    logger.info("Бот успешно завершил работу.")
 
 
 async def start():
     try:
         await bot.delete_webhook(drop_pending_updates=True)
         dp.include_routers(*get_routers())
-        await db.connect()
-
-        await db.create_table_users()
-
         await dp.start_polling(bot)
     finally:
         await bot.session.close()
