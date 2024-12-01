@@ -9,4 +9,4 @@ class DBContainer(containers.DeclarativeContainer):
     db_pool = providers.Resource(connect)
 
     # Database instance provider
-    db = providers.Factory(Database, pool=db_pool)
+    db = providers.Factory(Database, pool=db_pool.provided)
