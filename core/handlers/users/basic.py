@@ -2,6 +2,7 @@ from aiogram import Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
 from container import container
+from core.utils.db_api import Database
 
 
 router = Router()
@@ -9,9 +10,9 @@ router = Router()
 
 @router.message(CommandStart())
 async def start(message: Message):
-    name = message.from_user.username
+    name = message.from_user.full_name
 
-    db = container.get("db")
+    db: Database = container.get("db")
     user = await db.select_user(message.from_user.id)
     if user is None:
         await db.add_user(
