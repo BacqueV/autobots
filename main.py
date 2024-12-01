@@ -16,7 +16,7 @@ container = DBContainer()
 @dp.startup.register
 async def on_startup():
     # initializing connection pool
-    await container.db_pool.init()
+    await container.db_pool()
 
     db = container.db()
     await db.create_table_users()
