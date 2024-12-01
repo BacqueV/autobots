@@ -4,21 +4,21 @@ import asyncio
 
 from core.settings import settings
 from core.handlers import get_routers
-from core.utils.db_api import Database
 from core.utils.set_bot_commands import set_bot_commands
 from core.utils.log_config import logger
-from container import container
+from container import DBContainer
 
 bot = Bot(token=settings.bot.token, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
+container = DBContainer()
 
 
 @dp.startup.register
 async def on_startup():
-    db = Database()
-    container.register("db", db)
+    # initializing connection pool
+    await container.db_pool()
 
-    await db.connect()
+    db = container.db()
     await db.create_table_users()
     await set_bot_commands(bot)
     logger.info("Бот успешно запущен!")

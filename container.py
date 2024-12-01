@@ -1,12 +1,12 @@
-class Container:
-    def __init__(self):
-        self._registry = {}
-
-    def register(self, name, obj):
-        self._registry[name] = obj
-
-    def get(self, name):
-        return self._registry.get(name)
+from dependency_injector import containers, providers
+from core.utils.db_api import Database, connect
 
 
-container = Container()
+class DBContainer(containers.DeclarativeContainer):
+    """DI-контейнер для базы данных."""
+
+    # pool connection provider
+    db_pool = providers.Resource(connect)
+
+    # Database instance provider
+    db = providers.Factory(Database, pool=db_pool)

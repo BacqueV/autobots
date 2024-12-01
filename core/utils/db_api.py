@@ -1,16 +1,15 @@
 import asyncpg
-from typing import Union
 from asyncpg import Connection
-from asyncpg.pool import Pool
 from core.settings import settings
 
 
-class Database:
-    def __init__(self):
-        self.pool: Union[Pool, None] = None
+async def connect():
+    return await asyncpg.create_pool(dsn=settings.connection.get_dsn())
 
-    async def connect(self):
-        self.pool = await asyncpg.create_pool(dsn=settings.connection.get_dsn())
+
+class Database:
+    def __init__(self, pool):
+        self.pool = pool
 
     async def disconnect(self):
         if self.pool is not None:
